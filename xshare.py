@@ -6254,19 +6254,10 @@ def vaphim(name,url,img,fanart,mode,page,query):
 			if title and href:
 				addir_info(namecolor(title, c), href, img, '', mode, 1, 'eps', True)
 
-		s = xsearch("(<ul class='page-numbers'.+?/ul)", b, 1, re.S)
-		href = xsearch('href="([^"]+?)">Trang sau &raquo;</a>', s)
-		if href:
-			pages = max([int(i) for i in re.findall('>(\d+)</a>', s)])
-			p = xsearch("href='%s'>(\d+)</a>" % href, s)
-
-			if not p and xsearch('s=(.+?)#', href):
-				q = xsearch('s=(.+?)#', href)
-				href = href.split('?')[0] + '?searchtype=movie&post_type=movie&s=' + q
-				p = page + 1
-
-			title = namecolor('Trang tiếp theo ...%s/%s' % (p, pages), 'lime')
-			addir_info(title, href, ico, '', mode, page + 1, 'page', True)
+		nextPage = xsearch('<link rel="next" href="([^"]+?)"', b)
+		if nextPage:
+			title = namecolor('Trang tiếp theo', 'lime')
+			addir_info(title, nextPage, ico, '', mode, 1, 'page', True)
 
 	def vp_getpage(url):
 		#href = url.split('?')[0] if page==1 else '%spage/%d/' % (url.split('?')[0],page)
